@@ -21,6 +21,10 @@ public class DetectCollision : MonoBehaviour
         {
             Debug.Log("Game Over!!");
             Destroy(gameObject);
+        }else if (other.gameObject.CompareTag("Tail"))
+        {
+            Debug.Log("Game Over!!");
+            Destroy(gameObject);
         }
     }
 }

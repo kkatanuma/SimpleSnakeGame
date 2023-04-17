@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public float movementFrequency = 0.1f;
     private float counter;
     private bool move;
-
+    private float bounds = 19.5f;
     [SerializeField]
     private GameObject tailPrefab;
 
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody body;
     private Rigidbody head;
     private Transform tr;
+    private Collider snakeCollider;
 
     public bool addNode;
 
@@ -30,11 +31,11 @@ public class PlayerController : MonoBehaviour
     {
         tr = transform;
         body = GetComponent<Rigidbody>();
-
+        snakeCollider = GetComponent<Collider>();
         InitSnakeNodes();
         InitPlayer();
 
-        deltaPositions = new List<Vector3>()        {
+        deltaPositions = new List<Vector3>(){
             new Vector3(-speed, 0f), //-dx
             new Vector3(0f, speed),  //dy
             new Vector3(speed, 0f),  //dx
@@ -97,6 +98,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     void Move()
     {
         Vector3 deltaPosition = deltaPositions[(int)direction];
@@ -106,7 +108,29 @@ public class PlayerController : MonoBehaviour
         body.position += deltaPosition;
         head.position += deltaPosition;
 
-        for(int i = 1; i < nodes.Count; i++)
+        // Wrap around if the snake goes out of bounds
+        //Manually Moving the SnakeCollider when going offBounds so it remains in the head.
+        if (head.position.x > bounds)
+        {
+            head.position = new Vector3(-bounds, head.position.y, 0f);
+            snakeCollider.transform.position = new Vector3(-bounds, head.position.y, 0f);
+        }
+        else if (head.position.x < -bounds)
+        {
+            head.position = new Vector3(bounds, head.position.y, 0f);
+            snakeCollider.transform.position = new Vector3(bounds, head.position.y, 0f);
+        }
+        else if (head.position.y > bounds)
+        {
+            head.position = new Vector3(head.position.x, -bounds, 0f);
+            snakeCollider.transform.position = new Vector3(head.position.x, -bounds, 0f);
+        }
+        else if (head.position.y < -bounds)
+        {
+            head.position = new Vector3(head.position.x, bounds, 0f);
+            snakeCollider.transform.position = new Vector3(head.position.x, bounds, 0f);
+        }
+        for (int i = 1; i < nodes.Count; i++)
         {
             prevPosition = nodes[i].position;
             nodes[i].position = parentPos;
@@ -147,11 +171,9 @@ public class PlayerController : MonoBehaviour
         }else
         {
             direction = dir;
-
             //TO handle playerInput immediately
             ForceMove();
         }
-        
     }
 
     void ForceMove()

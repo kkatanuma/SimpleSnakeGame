@@ -19,11 +19,11 @@ public class DetectCollision : MonoBehaviour
             Destroy(other.gameObject);
         }else if(other.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("Game Over!!");
+            Debug.Log("Game Over!! Collided with: " + other.name);
             Destroy(gameObject);
         }else if (other.gameObject.CompareTag("Tail"))
         {
-            Debug.Log("Game Over!!");
+            Debug.Log("Game Over!! Collided with: " + other.name + gameObject.GetInstanceID());
             Destroy(gameObject);
         }
     }

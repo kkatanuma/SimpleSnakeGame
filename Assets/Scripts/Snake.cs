@@ -195,6 +195,7 @@ protected virtual void Move()
         nodes.Add(tr.GetChild(nodes.Count).GetComponent<Rigidbody>());
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Powerup"))

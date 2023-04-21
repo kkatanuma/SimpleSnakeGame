@@ -378,6 +378,7 @@ GameObject:
   - component: {fileID: 1677285283}
   - component: {fileID: 1677285282}
   - component: {fileID: 1677285281}
+  - component: {fileID: 1677285285}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -464,6 +465,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!65 &1677285285
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677285280}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.2204466e-16, z: 10.000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1844000104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -521,37 +535,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87b7882483e8d1541890e29fe5720fa0, type: 3}
---- !u!1 &1844000105 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 433638315943852291, guid: 87b7882483e8d1541890e29fe5720fa0, type: 3}
-  m_PrefabInstance: {fileID: 1844000104}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1844000117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844000105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c46b7c052b160414e9113560adc8b44b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: 0
-  snake: {fileID: 0}
---- !u!114 &1844000118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844000105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8d7ed30686824d4597d4d5a08b418a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentDirection: 0
-  tailPrefab: {fileID: 3034129271614455048, guid: 14efdacf664ce214e83797f0d406f0c1, type: 3}
-  addNode: 0

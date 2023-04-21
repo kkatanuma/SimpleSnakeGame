@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 433638315943852290}
   - component: {fileID: 433638315943852319}
   - component: {fileID: 433638315943852316}
+  - component: {fileID: 1844000117}
+  - component: {fileID: 1844000118}
   m_Layer: 0
   m_Name: Snake
   m_TagString: Untagged
@@ -65,6 +67,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1844000117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433638315943852291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c46b7c052b160414e9113560adc8b44b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: 0
+  snake: {fileID: 0}
+--- !u!114 &1844000118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433638315943852291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d7ed30686824d4597d4d5a08b418a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDirection: 0
+  tailPrefab: {fileID: 3034129271614455048, guid: 14efdacf664ce214e83797f0d406f0c1, type: 3}
+  addNode: 0
 --- !u!1 &433638316484413424
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,17 +1,19 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
     private uint playerId;
     private float speed = 1.0f;
-    private float movementFrequency = 1.0f;
+    private float movementFrequency = 0.1f;
     private float bounds = 19.5f;
     private float counter;
     private bool move;
     public PlayerDirection currentDirection;
     public GameObject tailPrefab;
     private List<Vector3> deltaPositions;
+    private List<Vector3> previousHeadPositions;
     private List<Rigidbody> nodes;
 
     private Rigidbody body;
@@ -20,6 +22,7 @@ public class Snake : MonoBehaviour
     private Collider snakeCollider;
 
     public bool addNode;
+    private bool outOfBounds;
 
     // Start is called before the first frame update
     void Awake()
@@ -36,6 +39,7 @@ public class Snake : MonoBehaviour
             new Vector3(speed, 0f),  //dx
             new Vector3(0f, -speed), //-dy
         };
+        previousHeadPositions = new List<Vector3>();
     }
 
     // Update is called once per frame
@@ -96,20 +100,23 @@ public class Snake : MonoBehaviour
         currentDirection = (PlayerDirection)randomDir;
     }
 
-    void Move()
+protected virtual void Move()
+{
+    Vector3 deltaPosition = deltaPositions[(int)currentDirection];
+    Vector3 parentPos = head.position;
+    Vector3 prevPosition;
+
+    body.position += deltaPosition;
+    head.position += deltaPosition;
+
+    // Wrap around if the snake goes out of bounds
+    if (head.position.x > bounds || head.position.x < -bounds || head.position.y > bounds || head.position.y < -bounds)
     {
-        Vector3 deltaPosition = deltaPositions[(int)currentDirection];
-        Vector3 parentPos = head.position;
-        Vector3 prevPosition;
+        // Add the previous head position to previousHeadPositions list
+        previousHeadPositions.Add(parentPos);
 
-        body.position += deltaPosition;
-        head.position += deltaPosition;
-
-        // Wrap around if the snake goes out of bounds
-        //Manually Moving the SnakeCollider when going offBounds so it remains in the head.
         if (head.position.x > bounds)
         {
-            
             head.position = new Vector3(-bounds, head.position.y, 0f);
             snakeCollider.transform.position = new Vector3(-bounds, head.position.y, 0f);
         }
@@ -128,26 +135,41 @@ public class Snake : MonoBehaviour
             head.position = new Vector3(head.position.x, bounds, 0f);
             snakeCollider.transform.position = new Vector3(head.position.x, bounds, 0f);
         }
-        for (int i = 1; i < nodes.Count; i++)
+    }
+
+    for (int i = 1; i < nodes.Count; i++)
+    {
+        // Check if there is a previous head position for this node to follow
+        if (previousHeadPositions.Count > 0)
         {
             prevPosition = nodes[i].position;
-            Debug.Log(prevPosition);
+            nodes[i].position = previousHeadPositions[0];
+            parentPos = prevPosition;
+
+            // Remove the followed position from the list
+            previousHeadPositions.RemoveAt(0);
+        }
+        else
+        {
+            prevPosition = nodes[i].position;
             nodes[i].position = parentPos;
-            
             parentPos = prevPosition;
         }
-
-        //Check if we need to add node
-        if (addNode)
-        {
-            addNode = false;
-            GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position, Quaternion.identity);
-
-            //Keep the scale relative to parent
-            newTail.transform.SetParent(transform, true);
-            nodes.Add(newTail.GetComponent<Rigidbody>());
-        }
     }
+
+    // Check if we need to add node
+    if (addNode)
+    {
+        addNode = false;
+        GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position, Quaternion.identity);
+
+        // Keep the scale relative to parent
+        newTail.transform.SetParent(transform, true);
+        nodes.Add(newTail.GetComponent<Rigidbody>());
+    }
+}
+
+
 
 
     void CheckMovementFrequency()

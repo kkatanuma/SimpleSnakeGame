@@ -12,6 +12,12 @@ public class SnakeBot : Snake
     private int stepsBeforeChangeDirection = 5; // Change direction every 5 steps
 
 
+    new void Awake()
+    {
+        base.Awake();
+        pathfinding = Pathfinding.Instance;
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -55,6 +61,8 @@ public class SnakeBot : Snake
             }
         }
     }
+
+
 
     bool IsNextPositionWalkable(Vector3 nextPosition)
     {

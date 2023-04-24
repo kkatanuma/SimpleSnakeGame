@@ -36,7 +36,7 @@ public class Grid <TGridObject>
                 gridArray[x, y] = createGridObject(this, x, y);
             }
         }
-                bool showDebug = true;
+                bool showDebug = false;
 
         if (showDebug)
         {

@@ -65,8 +65,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.94, y: 1, z: 1}
+  m_Center: {x: -0.07, y: 0, z: 0}
 --- !u!114 &1844000117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,8 +94,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d7ed30686824d4597d4d5a08b418a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 1
+  minBounds: 0
+  maxBounds: 40
+  move: 0
   currentDirection: 0
   tailPrefab: {fileID: 3034129271614455048, guid: 14efdacf664ce214e83797f0d406f0c1, type: 3}
+  deltaPositions: []
+  nodes: []
+  body: {fileID: 0}
+  head: {fileID: 0}
   addNode: 0
 --- !u!1 &433638316484413424
 GameObject:
@@ -308,7 +316,7 @@ BoxCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: -0.09, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &433638316732059689
 Rigidbody:
   m_ObjectHideFlags: 0

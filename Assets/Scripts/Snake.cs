@@ -201,19 +201,20 @@ protected virtual void Move()
     {
         if (other.gameObject.CompareTag("Powerup"))
         {
-            Debug.Log("Powerup collected");
             addNode = true;
             Destroy(other.gameObject);
+            ScoreManager.instance.AddPoint();
+            WorldManager.instance.AddPoint();
         }
         else if (other.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("Game Over!! Collided with: " + other.name);
             Destroy(gameObject);
+            WorldManager.instance.GameOver();
         }
         else if (other.gameObject.CompareTag("Tail"))
         {
-            Debug.Log("Game Over!! Collided with: " + other.name + gameObject.GetInstanceID());
-            //Destroy(gameObject);
+            Destroy(gameObject);
+            WorldManager.instance.GameOver();
         }
     }
 }

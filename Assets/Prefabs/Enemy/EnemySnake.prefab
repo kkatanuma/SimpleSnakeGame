@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 6667383128199361814}
   - component: {fileID: 6667383128199361803}
   - component: {fileID: 6667383128199361800}
-  - component: {fileID: 6522296797170022782}
-  - component: {fileID: 1568237577000018943}
-  - component: {fileID: 6522296795762363411}
+  - component: {fileID: 7715977295998912668}
   m_Layer: 0
   m_Name: EnemySnake
   m_TagString: Untagged
@@ -68,7 +66,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6522296797170022782
+--- !u!114 &7715977295998912668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,38 +75,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6667383128199361815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c46b7c052b160414e9113560adc8b44b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8120bc9a4e024e24bb8b905c9b5888c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
   speed: 1
-  movementFrequency: 0.098
+  minBounds: 0
+  maxBounds: 40
+  move: 0
+  currentDirection: 0
   tailPrefab: {fileID: 8890285913399065231, guid: 350c3b78209367c46ac4397d2ea43927, type: 3}
+  nodes: []
+  body: {fileID: 0}
+  head: {fileID: 0}
   addNode: 0
---- !u!114 &1568237577000018943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6667383128199361815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5764324e82d84694ba4e343faff9b4c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6522296795762363411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6667383128199361815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1de8f85b4df575846aea2246f3c38ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6667383128708402148
 GameObject:
   m_ObjectHideFlags: 0

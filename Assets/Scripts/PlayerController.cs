@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private int horizontal = 0;
     private int vertical = 0;
     public Snake snake;
+    private float lastInputTime;
+    public float inputDelay = 0.1f;
 
     public enum Axis
     {
@@ -32,12 +34,24 @@ public class PlayerController : MonoBehaviour
 
     void GetKeyboardInput()
     {
-        horizontal = GetAxisRaw(Axis.Horizontal);
-        vertical = GetAxisRaw(Axis.Vertical);
-
-        if (horizontal != 0)
+        if (Time.time - lastInputTime < inputDelay)
         {
+            return;
+        }
+
+        int newHorizontal = GetAxisRaw(Axis.Horizontal);
+        int newVertical = GetAxisRaw(Axis.Vertical);
+
+        if (newHorizontal != 0)
+        {
+            horizontal = newHorizontal;
             vertical = 0;
+            lastInputTime = Time.time;
+        }
+        else if (newVertical != 0)
+        {
+            vertical = newVertical;
+            lastInputTime = Time.time;
         }
     }
 

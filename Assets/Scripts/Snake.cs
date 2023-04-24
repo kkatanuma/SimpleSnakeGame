@@ -5,19 +5,20 @@ using UnityEngine;
 public class Snake : MonoBehaviour
 {
     private uint playerId;
-    private float speed = 1.0f;
+    public float speed = 1.0f;
     private float movementFrequency = 0.1f;
-    private float bounds = 19.5f;
+    public float minBounds = 0.0f;
+    public float maxBounds = 40.0f;
     private float counter;
-    private bool move;
+    public bool move;
     public PlayerDirection currentDirection;
     public GameObject tailPrefab;
-    private List<Vector3> deltaPositions;
+    public List<Vector3> deltaPositions;
     private List<Vector3> previousHeadPositions;
-    private List<Rigidbody> nodes;
+    public List<Rigidbody> nodes;
 
-    private Rigidbody body;
-    private Rigidbody head;
+    public Rigidbody body;
+    public Rigidbody head;
     private Transform tr;
     private Collider snakeCollider;
 
@@ -25,7 +26,7 @@ public class Snake : MonoBehaviour
     private bool outOfBounds;
 
     // Start is called before the first frame update
-    void Awake()
+    protected void Awake()
     {
         tr = transform;
         body = GetComponent<Rigidbody>();
@@ -43,7 +44,7 @@ public class Snake : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         CheckMovementFrequency();
     }
@@ -94,7 +95,7 @@ public class Snake : MonoBehaviour
 
     }
 
-    void SetRandomDirection()
+    public void SetRandomDirection()
     {
         int randomDir = Random.Range(0, (int)PlayerDirection.COUNT);
         currentDirection = (PlayerDirection)randomDir;
@@ -110,30 +111,30 @@ protected virtual void Move()
     head.position += deltaPosition;
 
     // Wrap around if the snake goes out of bounds
-    if (head.position.x > bounds || head.position.x < -bounds || head.position.y > bounds || head.position.y < -bounds)
-    {
+    if (head.position.x > maxBounds || head.position.x < minBounds|| head.position.y > maxBounds || head.position.y < minBounds)
+            {
         // Add the previous head position to previousHeadPositions list
         previousHeadPositions.Add(parentPos);
 
-        if (head.position.x > bounds)
+        if (head.position.x > maxBounds)
         {
-            head.position = new Vector3(-bounds, head.position.y, 0f);
-            snakeCollider.transform.position = new Vector3(-bounds, head.position.y, 0f);
+            head.position = new Vector3(minBounds, head.position.y, 0f);
+            snakeCollider.transform.position = new Vector3(minBounds, head.position.y, 0f);
         }
-        else if (head.position.x < -bounds)
+        else if (head.position.x < minBounds)
         {
-            head.position = new Vector3(bounds, head.position.y, 0f);
-            snakeCollider.transform.position = new Vector3(bounds, head.position.y, 0f);
+            head.position = new Vector3(maxBounds, head.position.y, 0f);
+            snakeCollider.transform.position = new Vector3(maxBounds, head.position.y, 0f);
         }
-        else if (head.position.y > bounds)
+        else if (head.position.y > maxBounds)
         {
-            head.position = new Vector3(head.position.x, -bounds, 0f);
-            snakeCollider.transform.position = new Vector3(head.position.x, -bounds, 0f);
+            head.position = new Vector3(head.position.x, -minBounds, 0f);
+            snakeCollider.transform.position = new Vector3(head.position.x, -minBounds, 0f);
         }
-        else if (head.position.y < -bounds)
+        else if (head.position.y < -minBounds)
         {
-            head.position = new Vector3(head.position.x, bounds, 0f);
-            snakeCollider.transform.position = new Vector3(head.position.x, bounds, 0f);
+            head.position = new Vector3(head.position.x, maxBounds, 0f);
+            snakeCollider.transform.position = new Vector3(head.position.x, maxBounds, 0f);
         }
     }
 
@@ -212,7 +213,7 @@ protected virtual void Move()
         else if (other.gameObject.CompareTag("Tail"))
         {
             Debug.Log("Game Over!! Collided with: " + other.name + gameObject.GetInstanceID());
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }

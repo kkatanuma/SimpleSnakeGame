@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private float xBound = 19.5f;
-    private float yBound = 19.5f;
+    private float minBound = 0.5f;
+    private float maxBound = 39.5f;
     public float startDelay = 2.0f;
     public float maxPowerups = 20;
     public int maxWalls = 10;
@@ -21,6 +21,7 @@ public class SpawnManager : MonoBehaviour
     public float spawnProbablility = 0.25f;
     private int powerupCount;
     public int maxSpawnAttemptsPerObstacle = 20;
+    public bool gameReady = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -52,8 +53,8 @@ public class SpawnManager : MonoBehaviour
         while (!isValid && spawnAttempts < maxSpawnAttemptsPerObstacle)
         {
             spawnAttempts++;
-            float spawnPosX = Random.Range(-xBound, xBound);
-            float spawnPosY = Random.Range(-yBound, yBound);
+            float spawnPosX = Random.Range(minBound, maxBound);
+            float spawnPosY = Random.Range(minBound, maxBound);
             spawnPos = new Vector3(spawnPosX, spawnPosY, 0);
             isValid = PreventSpawnOverLap(spawnPos, 3.0f);
         }
@@ -87,8 +88,8 @@ void SpawnRandomWall()
             while (!isValid && spawnAttempts < maxSpawnAttemptsPerObstacle)
             {
                 spawnAttempts++;
-                float spawnPosX = Random.Range(-xBound + 5.0f, xBound - 5.0f);
-                float spawnPosY = Random.Range(-yBound + 5.0f, yBound - 5.0f);
+                float spawnPosX = Random.Range(minBound + 5.0f, maxBound - 5.0f);
+                float spawnPosY = Random.Range(minBound + 5.0f, maxBound - 5.0f);
                 spawnPos = new Vector3(spawnPosX, spawnPosY, 0);
                 isValid = PreventSpawnOverLap(spawnPos, 2.0f);
             }
@@ -110,8 +111,8 @@ void SpawnRandomWall()
             float randomValue = Random.Range(0f, 1f);
             if (randomValue >= spawnProbablility)
             {
-                    Instantiate(defaultWallPrefab, new Vector3(xBound, yBound - (4 * i), 0), Quaternion.identity);
-                    Instantiate(defaultWallPrefab, new Vector3(-xBound, yBound - (4 * i), 0), Quaternion.identity);
+                    Instantiate(defaultWallPrefab, new Vector3(maxBound, maxBound - (4 * i), 0), Quaternion.identity);
+                    Instantiate(defaultWallPrefab, new Vector3(-minBound +1.0f, maxBound - (4 * i), 0), Quaternion.identity);
             }
         }
         //Building Top and Bottom Walls
@@ -120,8 +121,8 @@ void SpawnRandomWall()
             float randomValue = Random.Range(0f, 1f);
             if (randomValue >= spawnProbablility)
             {
-                Instantiate(defaultWallPrefab, new Vector3(-xBound + (4 * i), yBound, 0), Quaternion.Euler(0, 0, 90));
-                Instantiate(defaultWallPrefab, new Vector3(-xBound + (4 * i), -yBound, 0), Quaternion.Euler(0, 0, 90));
+                Instantiate(defaultWallPrefab, new Vector3(minBound + (4 * i), minBound, 0), Quaternion.Euler(0, 0, 90));
+                Instantiate(defaultWallPrefab, new Vector3(minBound + (4 * i), maxBound, 0), Quaternion.Euler(0, 0, 90));
             }
         }
     }
@@ -135,13 +136,14 @@ void SpawnRandomWall()
         while (!isValid && spawnAttempts < maxSpawnAttemptsPerObstacle)
         {
             spawnAttempts++;
-            float spawnPosX = Random.Range(-xBound +5.0f, xBound -5.0f);
-            float spawnPosY = Random.Range(-yBound + 5.0f, yBound - 5.0f);
+            float spawnPosX = Random.Range(minBound +5.0f, maxBound -5.0f);
+            float spawnPosY = Random.Range(minBound + 5.0f, maxBound - 5.0f);
             spawnPos = new Vector3(spawnPosX, spawnPosY, 0);
             isValid = PreventSpawnOverLap(spawnPos, 3.0f);
         }
         if (isValid)
         {
+            
             Instantiate(SnakePrefab, spawnPos, Quaternion.identity);
         }
         else

@@ -5,7 +5,7 @@ using CodeMonkey.Utils;
 
 public class EnemySnake : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 1f;
+    //[SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float moveStep = 1f;
     Pathfinding pathfinding;
     private float movementFrequency = 0.1f; // Set movementFrequency to 1 so the snake moves every second
@@ -13,10 +13,19 @@ public class EnemySnake : MonoBehaviour
     public bool move;
     Vector3 startPosition;
     Vector3 targetPosition;
+    private Transform tr;
+    private List<Rigidbody> nodes;
+    private Rigidbody head;
 
     private List<Vector3> path;
     private int currentPathIndex;
 
+
+    private void Awake()
+    {
+        tr = transform;
+        InitSnakeNodes();
+    }
     private void Start()
     {
         pathfinding = new Pathfinding(40, 40);
@@ -65,13 +74,26 @@ public class EnemySnake : MonoBehaviour
 
             if (path != null && currentPathIndex < path.Count)
             {
+                Vector3 parentPos = head.position;
                 Vector3 targetPosition = path[currentPathIndex];
-                transform.position = targetPosition;
+                head.position = targetPosition;
 
                 if (Vector3.Distance(transform.position, targetPosition) < moveStep)
                 {
                     currentPathIndex++;
                 }
+                else
+                {
+                    for (int i = 1; i < nodes.Count; i++)
+                    {
+                        Vector3 prevPos = nodes[i].position;
+                        nodes[i].position = parentPos;
+                        parentPos = prevPos;
+                    }
+                }
+            }else
+            {
+                Debug.Log("can't find the path");
             }
         }
     }
@@ -118,5 +140,17 @@ public class EnemySnake : MonoBehaviour
         {
             Pathfinding.Instance.GetNode(wall.transform.position).SetIsWalkable(false);
         }
+    }
+
+    private void InitSnakeNodes()
+    {
+        nodes = new List<Rigidbody>
+        {
+            tr.GetChild(0).GetComponent<Rigidbody>(),
+            tr.GetChild(1).GetComponent<Rigidbody>(),
+            tr.GetChild(2).GetComponent<Rigidbody>()
+        };
+
+        head = nodes[0];
     }
 }

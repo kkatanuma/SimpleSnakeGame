@@ -173,7 +173,7 @@ protected virtual void Move()
 
 
 
-    void CheckMovementFrequency()
+    protected void CheckMovementFrequency()
     {
         counter += Time.deltaTime;
         if (counter >= movementFrequency)
@@ -214,7 +214,7 @@ protected virtual void Move()
         else if (other.gameObject.CompareTag("Tail"))
         {
             //Destroy(gameObject);
-            WorldManager.instance.GameOver();
+            //WorldManager.instance.GameOver();
         }
     }
 }

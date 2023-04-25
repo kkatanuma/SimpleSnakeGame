@@ -213,7 +213,7 @@ protected virtual void Move()
         }
         else if (other.gameObject.CompareTag("Tail"))
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
             WorldManager.instance.GameOver();
         }
     }

@@ -27,13 +27,13 @@ public class SpawnManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        InitiateWalls();
-        SpawnRandomWall();
+        /*InitiateWalls();
+        SpawnRandomWall();*/
     }
 
     public void Start()
     {
-        SpawnSnake();
+        //SpawnSnake();
         InvokeRepeating("SpawnPowerups", startDelay, repeat);
     }
 

@@ -27,16 +27,16 @@ public class Pathfinding
         grid.GetXY(endWorldPosition, out int endX, out int endY);
 
         List<PathNode> path = FindPath(startX, startY, endX, endY);
-        if(path == null){
+        if (path == null)
+        {
             return null;
         }
         else
         {
             List<Vector3> vectorPath = new List<Vector3>();
-            foreach(PathNode pathNode in path)
+            foreach (PathNode pathNode in path)
             {
-                vectorPath.Add(new Vector3(pathNode.x, pathNode.y) * grid.GetCellSize() + Vector3.one * grid.GetCellSize() * .5f);
-
+                vectorPath.Add(new Vector3(pathNode.x, pathNode.y, 0) * grid.GetCellSize() + new Vector3(0.5f, 0.5f, 0) * grid.GetCellSize());
             }
             return vectorPath;
         }
@@ -123,25 +123,17 @@ public class Pathfinding
 
         if (currentNode.x - 1 >= 0)
         {
-            //Left
+            // Left
             neighborList.Add(GetNode(currentNode.x - 1, currentNode.y));
-            //Left Down
-            if (currentNode.y - 1 >= 0) neighborList.Add(GetNode(currentNode.x - 1, currentNode.y - 1));
-            //Left Up
-            if (currentNode.y + 1 < grid.GetHeight()) neighborList.Add(GetNode(currentNode.x - 1, currentNode.y + 1));
         }
         if (currentNode.x + 1 < grid.GetWidth())
         {
-            //Right
+            // Right
             neighborList.Add(GetNode(currentNode.x + 1, currentNode.y));
-            //Right Down
-            if (currentNode.y - 1 >= 0) neighborList.Add(GetNode(currentNode.x + 1, currentNode.y - 1));
-            //Right Up
-            if (currentNode.y + 1 < grid.GetHeight()) neighborList.Add(GetNode(currentNode.x + 1, currentNode.y + 1));
         }
-        //Down
+        // Down
         if (currentNode.y - 1 >= 0) neighborList.Add(GetNode(currentNode.x, currentNode.y - 1));
-        //Up
+        // Up
         if (currentNode.y + 1 < grid.GetHeight()) neighborList.Add(GetNode(currentNode.x, currentNode.y + 1));
 
         return neighborList;

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class WorldManager : MonoBehaviour
 {
     public static WorldManager instance { get; private set; }
-    private Pathfinding pathfinding;
     public GameOverScreen GameOverScreen;
     private int powerupObtained = 0;
 
@@ -16,13 +15,11 @@ public class WorldManager : MonoBehaviour
     void Start()
     {
         instance = this;
-        pathfinding = new Pathfinding(40, 40);
 
     }
 
     private void Update()
     {
-        checkWallPositions();
     }
 
     public void GameOver()
@@ -36,15 +33,6 @@ public class WorldManager : MonoBehaviour
         Debug.Log("Application closed");
     }
 
-    private void checkWallPositions()
-    {
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
-        foreach (GameObject wall in walls)
-        {
-            PathNode temp = pathfinding.GetNode(wall.transform.position);
-            temp.isWalkable = false;
-        }
-    }
 
     public void AddPoint()
     {

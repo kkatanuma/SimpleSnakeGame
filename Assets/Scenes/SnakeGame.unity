@@ -1342,7 +1342,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 72
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!1001 &1448122960
 PrefabInstance:
@@ -1395,6 +1395,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 8311487956139494959, guid: 350c3b78209367c46ac4397d2ea43927, type: 3}
       propertyPath: m_Constraints
       value: 72
@@ -1403,6 +1404,8 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+=======
+>>>>>>> parent of 1533a8b (now snake tail follows the head.)
     - target: {fileID: 8890285913399065231, guid: 350c3b78209367c46ac4397d2ea43927, type: 3}
       propertyPath: m_Name
       value: EnemyTail
@@ -1790,7 +1793,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 72
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!1 &1604382451
 GameObject:
@@ -2107,7 +2110,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784903463}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: 2.53, y: 3.41, z: 0}
+=======
+  m_LocalPosition: {x: 3.36, y: 2.85, z: 0}
+>>>>>>> parent of 1533a8b (now snake tail follows the head.)
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

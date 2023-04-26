@@ -77,10 +77,18 @@ public class EnemySnake : MonoBehaviour
         if (move)
         {
             move = false; // Reset move to false after updating the position
+<<<<<<< HEAD
             int direction = GetNextMove(head.position, targetPosition);
             MoveSnake(direction);
         }
     }
+=======
+/*            if (startPosition != transform.position)
+            {
+                startPosition = transform.position;
+                path = Pathfinding.Instance.FindPath(startPosition, targetPosition);
+            }*/
+>>>>>>> parent of 1533a8b (now snake tail follows the head.)
 
     private int GetNextMove(Vector3 startPosition, Vector3 targetPosition)
     {
@@ -100,9 +108,30 @@ public class EnemySnake : MonoBehaviour
             
             if(deltaX < 0)
             {
+<<<<<<< HEAD
                 return 0;
             }
             if(deltaX > 0)
+=======
+                Vector3 parentPos = head.position;
+                Vector3 targetPosition = path[currentPathIndex];
+                head.position = targetPosition;
+
+                if (Vector3.Distance(transform.position, targetPosition) < moveStep)
+                {
+                    currentPathIndex++;
+                }
+                else
+                {
+                    for (int i = 1; i < nodes.Count; i++)
+                    {
+                        Vector3 prevPos = nodes[i].position;
+                        nodes[i].position = parentPos;
+                        parentPos = prevPos;
+                    }
+                }
+            }else
+>>>>>>> parent of 1533a8b (now snake tail follows the head.)
             {
                 return 2;
             }
@@ -195,6 +224,7 @@ public class EnemySnake : MonoBehaviour
 
         head = nodes[0];
     }
+<<<<<<< HEAD
 
 
     private void OnTriggerEnter(Collider other)
@@ -206,4 +236,6 @@ public class EnemySnake : MonoBehaviour
             Debug.Log("game over: " + this.gameObject.name + "collided with " + other.gameObject.name);
         }
     }
+=======
+>>>>>>> parent of 1533a8b (now snake tail follows the head.)
 }

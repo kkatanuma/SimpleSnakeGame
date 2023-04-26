@@ -16,6 +16,7 @@ public class EnemySnake : MonoBehaviour
     private Transform tr;
     private List<Rigidbody> nodes;
     private Rigidbody head;
+    private Rigidbody body;
 
     private List<Vector3> path;
     private int currentPathIndex;
@@ -24,6 +25,7 @@ public class EnemySnake : MonoBehaviour
     private void Awake()
     {
         tr = transform;
+        body = GetComponent<Rigidbody>();
         InitSnakeNodes();
     }
     private void Start()
@@ -72,6 +74,7 @@ public class EnemySnake : MonoBehaviour
                 Vector3 parentPos = head.position;
                 Vector3 targetPosition = path[currentPathIndex];
                 head.position = Vector3.MoveTowards(head.position, targetPosition, moveStep);
+                body.position = Vector3.MoveTowards(body.position, targetPosition, moveStep);
 
                 if (Vector3.Distance(head.position, targetPosition) < 0.1f)
                 {

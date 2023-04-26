@@ -16,15 +16,26 @@ public class EnemySnake : MonoBehaviour
     private Transform tr;
     private List<Rigidbody> nodes;
     private Rigidbody head;
+    private Rigidbody body;
+    private List<Vector3> deltaPositions;
 
     private List<Vector3> path;
     private int currentPathIndex;
 
 
+
+
     private void Awake()
     {
         tr = transform;
+        body = GetComponent<Rigidbody>();
         InitSnakeNodes();
+        deltaPositions = new List<Vector3>(){
+            new Vector3(-moveStep, 0f), //-dx
+            new Vector3(0f, moveStep),  //dy
+            new Vector3(moveStep, 0f),  //dx
+            new Vector3(0f, -moveStep), //-dy
+        };
     }
     private void Start()
     {
@@ -66,29 +77,66 @@ public class EnemySnake : MonoBehaviour
         if (move)
         {
             move = false; // Reset move to false after updating the position
+            int direction = GetNextMove(head.position, targetPosition);
+            MoveSnake(direction);
+        }
+    }
 
-            if (path != null && currentPathIndex < path.Count)
+    private int GetNextMove(Vector3 startPosition, Vector3 targetPosition)
+    {
+        // Convert positions to grid positions
+        Vector3 startGridPos = RoundToGrid(startPosition);
+        Vector3 targetGridPos = RoundToGrid(targetPosition);
+
+        // Find the path
+        List<Vector3> path = Pathfinding.Instance.FindPath(startGridPos, targetGridPos);
+
+        if (path != null && path.Count > 1)
+        {
+            // Calculate the direction to move by subtracting the current position from the next position in the path
+            Vector3 value = path[1];
+            int deltaX = (int)value.x - (int)startGridPos.x;
+            int deltaY = (int)value.y - (int)targetGridPos.y;
+            
+            if(deltaX < 0)
             {
-                Vector3 parentPos = head.position;
-                Vector3 targetPosition = path[currentPathIndex];
-                head.position = Vector3.MoveTowards(head.position, targetPosition, moveStep);
-
-                if (Vector3.Distance(head.position, targetPosition) < 0.1f)
-                {
-                    currentPathIndex++;
-                }
-
-                for (int i = 1; i < nodes.Count; i++)
-                {
-                    Vector3 prevPos = nodes[i].position;
-                    nodes[i].position = Vector3.MoveTowards(nodes[i].position, parentPos, moveStep);
-                    parentPos = prevPos;
-                }
+                return 0;
             }
-            else
+            if(deltaX > 0)
             {
-                Debug.Log("can't find the path");
+                return 2;
             }
+            if(deltaY < 0)
+            {
+                return 1;
+            }
+            return 3;
+        }
+        else
+        {
+            Debug.Log("No Path found");
+            return 4; // No valid path or direction found
+        }
+    }
+
+    private void MoveSnake(int direction)
+    {
+        if (direction == 4)
+        {
+            return; // Don't move if the direction is zero
+        }
+
+        // Move head
+        Vector3 parentPos = head.position;
+        head.position += deltaPositions[direction];
+        body.position += deltaPositions[direction];
+
+        // Move body nodes
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            Vector3 prevPos = nodes[i].position;
+            nodes[i].position = parentPos;
+            parentPos = prevPos;
         }
     }
 
@@ -155,7 +203,7 @@ public class EnemySnake : MonoBehaviour
         {
             //Destroy(gameObject);
             //WorldManager.instance.GameOver();
-            Debug.Log("game over");
+            Debug.Log("game over: " + this.gameObject.name + "collided with " + other.gameObject.name);
         }
     }
 }

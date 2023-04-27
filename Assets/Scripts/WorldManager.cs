@@ -9,7 +9,7 @@ public class WorldManager : MonoBehaviour
 {
     public static WorldManager instance { get; private set; }
     public GameOverScreen GameOverScreen;
-    private int powerupObtained = 0;
+    private uint powerupObtained = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,13 +37,12 @@ public class WorldManager : MonoBehaviour
     public void AddPoint()
     {
         powerupObtained++;
-        if(powerupObtained == 5) {
-            SpawnManager.Instance.SpawnAWall();
-        }
-        if(powerupObtained == 3)
+        if (powerupObtained % 3 == 0)
         {
-            powerupObtained = 0;
             SpawnManager.Instance.SpawnEnemySnake();
+        }
+        if (powerupObtained % 5 ==0) {
+            SpawnManager.Instance.SpawnAWall();
         }
     }
 }

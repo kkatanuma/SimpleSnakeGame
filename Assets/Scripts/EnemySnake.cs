@@ -15,16 +15,14 @@ public class EnemySnake : Snake
         body = GetComponent<Rigidbody>();
         InitSnakeNodes();
         currentPathIndex = 0;
-        movementFrequency = 0.08f;
+        m_movementFrequency = 0.08f;
     }
 
     protected override void FixedUpdate()
     {
-        Debug.Log(move);
         if (move)
         {
             move = false; // Reset move to false after updating the position
-            Debug.Log("Path is null? " +m_path == null);
             if (m_path != null && currentPathIndex < m_path.Count)
             {
                 Vector3 parentPos = head.position;
@@ -43,15 +41,18 @@ public class EnemySnake : Snake
                     nodes[i].position = Vector3.MoveTowards(nodes[i].position, parentPos, moveStep);
                     parentPos = prevPos;
                 }
-
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
     }
 
     public void SetDirection(int dir)
     {
-        currentDirection = (PlayerDirection)dir;
-        switch (currentDirection)
+        m_currentDirection = (PlayerDirection)dir;
+        switch (m_currentDirection)
         {
             case PlayerDirection.RIGHT:
                 nodes[1].position = nodes[0].position - new Vector3(Metrics.NODE, 0f, 0f);
@@ -83,6 +84,10 @@ public class EnemySnake : Snake
         {
             Destroy(other.gameObject);
             Destroy(gameObject);
+        }else if (other.gameObject.CompareTag("Tail"))
+        {
+            Destroy(other.transform.parent.gameObject);
+            WorldManager.instance.GameOver();
         }
     }
 

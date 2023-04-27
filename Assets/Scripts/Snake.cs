@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    private uint playerId;
-    public float speed = 1.0f;
-    public float movementFrequency = 0.1f;
+    public float m_speed = 1.0f;
+    public float m_movementFrequency = 0.1f;
     public float minBounds = 0.0f;
     public float maxBounds = 40.0f;
-    private float counter;
+    private float m_counter;
     public bool move;
-    public PlayerDirection currentDirection;
+    public PlayerDirection m_currentDirection;
     public GameObject tailPrefab;
     public List<Vector3> deltaPositions;
     private List<Vector3> previousHeadPositions;
@@ -23,7 +22,6 @@ public class Snake : MonoBehaviour
     private Collider snakeCollider;
 
     public bool addNode;
-    private bool outOfBounds;
 
     // Start is called before the first frame update
     protected virtual void Awake()
@@ -35,10 +33,10 @@ public class Snake : MonoBehaviour
         SpawnSnake();
 
         deltaPositions = new List<Vector3>(){
-            new Vector3(-speed, 0f), //-dx
-            new Vector3(0f, speed),  //dy
-            new Vector3(speed, 0f),  //dx
-            new Vector3(0f, -speed), //-dy
+            new Vector3(-m_speed, 0f), //-dx
+            new Vector3(0f, m_speed),  //dy
+            new Vector3(m_speed, 0f),  //dx
+            new Vector3(0f, -m_speed), //-dy
         };
         previousHeadPositions = new List<Vector3>();
     }
@@ -73,7 +71,7 @@ public class Snake : MonoBehaviour
     private void SpawnSnake()
     {
         SetRandomDirection();
-        switch (currentDirection)
+        switch (m_currentDirection)
         {
             case PlayerDirection.RIGHT:
                 nodes[1].position = nodes[0].position - new Vector3(Metrics.NODE, 0f, 0f);
@@ -98,12 +96,12 @@ public class Snake : MonoBehaviour
     public void SetRandomDirection()
     {
         int randomDir = Random.Range(0, (int)PlayerDirection.COUNT);
-        currentDirection = (PlayerDirection)randomDir;
+        m_currentDirection = (PlayerDirection)randomDir;
     }
 
 protected virtual void Move()
 {
-    Vector3 deltaPosition = deltaPositions[(int)currentDirection];
+    Vector3 deltaPosition = deltaPositions[(int)m_currentDirection];
     Vector3 parentPos = head.position;
     Vector3 prevPosition;
 
@@ -175,24 +173,24 @@ protected virtual void Move()
 
     protected void CheckMovementFrequency()
     {
-        counter += Time.deltaTime;
-        if (counter >= movementFrequency)
+        m_counter += Time.deltaTime;
+        if (m_counter >= m_movementFrequency)
         {
-            counter = 0f;
+            m_counter = 0f;
             move = true;
         }
     }
 
     public void ForceMove()
     {
-        counter = 0;
+        m_counter = 0;
         move = false;
         Move();
     }
 
     public void Grow()
     {
-        GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position += deltaPositions[(int)currentDirection], Quaternion.identity) ;
+        GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position += deltaPositions[(int)m_currentDirection], Quaternion.identity) ;
         nodes.Add(tr.GetChild(nodes.Count).GetComponent<Rigidbody>());
     }
 
@@ -215,10 +213,13 @@ protected virtual void Move()
         {
             Destroy(gameObject);
             WorldManager.instance.GameOver();
-        }else if (other.gameObject.CompareTag("Snake"))
+        }
+        else if (other.gameObject.CompareTag("Snake"))
         {
             Destroy(gameObject);
-            WorldManager.instance.GameOver(); 
+            WorldManager.instance.GameOver();
         }
     }
+
+    
 }

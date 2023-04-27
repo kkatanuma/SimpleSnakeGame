@@ -105,16 +105,16 @@ public class PlayerController : MonoBehaviour
     public void SetInputDirection(PlayerDirection inputDir)
     {
         //Prevent change direction to opposite sides
-        if (inputDir == PlayerDirection.UP && snake.currentDirection == PlayerDirection.DOWN ||
-           inputDir == PlayerDirection.DOWN && snake.currentDirection == PlayerDirection.UP ||
-           inputDir == PlayerDirection.RIGHT && snake.currentDirection == PlayerDirection.LEFT ||
-           inputDir == PlayerDirection.LEFT && snake.currentDirection == PlayerDirection.RIGHT)
+        if (inputDir == PlayerDirection.UP && snake.m_currentDirection == PlayerDirection.DOWN ||
+           inputDir == PlayerDirection.DOWN && snake.m_currentDirection == PlayerDirection.UP ||
+           inputDir == PlayerDirection.RIGHT && snake.m_currentDirection == PlayerDirection.LEFT ||
+           inputDir == PlayerDirection.LEFT && snake.m_currentDirection == PlayerDirection.RIGHT)
         {
             return;
         }
         else
         {
-            snake.currentDirection = inputDir;
+            snake.m_currentDirection = inputDir;
             //TO handle playerInput immediately
             //snake.ForceMove();
         }

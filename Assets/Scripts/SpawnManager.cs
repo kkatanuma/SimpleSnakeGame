@@ -232,9 +232,12 @@ public class SpawnManager : MonoBehaviour
     private void CheckWallPosition()
     {
         GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
-        foreach (GameObject wall in walls)
+        if (walls.Length > 0)
         {
-            pathfinding.GetNode(wall.transform.position).SetIsWalkable(false);
+            foreach (GameObject wall in walls)
+            {
+                pathfinding.GetNode(wall.transform.position).SetIsWalkable(false);
+            }
         }
     }
 

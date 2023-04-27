@@ -20,6 +20,9 @@ public class EnemySnake : MonoBehaviour
 
     private List<Vector3> path;
     private int currentPathIndex;
+    PlayerDirection currentDirection;
+    private List<Vector3> deltaPositions;
+    private Dictionary<PlayerDirection, PlayerDirection> oppositeDirections;
 
 
     private void Awake()
@@ -27,13 +30,42 @@ public class EnemySnake : MonoBehaviour
         tr = transform;
         body = GetComponent<Rigidbody>();
         InitSnakeNodes();
+        deltaPositions = new List<Vector3>(){
+            new Vector3(-moveStep, 0f), //-dx
+            new Vector3(0f, moveStep),  //dy
+            new Vector3(moveStep, 0f),  //dx
+            new Vector3(0f, -moveStep), //-dy
+        };
+
+        oppositeDirections = new Dictionary<PlayerDirection, PlayerDirection>()
+        {
+             {
+            PlayerDirection.LEFT,
+            PlayerDirection.RIGHT
+            },
+            {
+            PlayerDirection.UP,
+            PlayerDirection.DOWN
+
+            },
+            {
+            PlayerDirection.RIGHT,
+            PlayerDirection.LEFT
+            },
+            {
+            PlayerDirection.DOWN,
+            PlayerDirection.UP
+            },
+            {
+            PlayerDirection.COUNT,
+            PlayerDirection.COUNT
+            }
+        };
     }
     private void Start()
     {
         pathfinding = new Pathfinding(40, 40);
         Vector3 startPosition = RoundToGrid(transform.position);
-        targetPosition = RoundToGrid(new Vector3(35, 37)); // Set your desired target position
-        SetTargetPosition(targetPosition);
     }
 
     void Update()
@@ -68,7 +100,6 @@ public class EnemySnake : MonoBehaviour
         if (move)
         {
             move = false; // Reset move to false after updating the position
-
             if (path != null && currentPathIndex < path.Count)
             {
                 Vector3 parentPos = head.position;
@@ -90,7 +121,7 @@ public class EnemySnake : MonoBehaviour
             }
             else
             {
-                Debug.Log("can't find the path");
+                SetTargetPosition(FindNearestPowerUp());
             }
         }
     }
@@ -99,6 +130,7 @@ public class EnemySnake : MonoBehaviour
     {
         CheckWallPositions();
         Vector3 startPosition = RoundToGrid(transform.position);
+        
         path = Pathfinding.Instance.FindPath(startPosition, targetPosition);
 
         if (path != null)
@@ -137,6 +169,12 @@ public class EnemySnake : MonoBehaviour
         {
             Pathfinding.Instance.GetNode(wall.transform.position).SetIsWalkable(false);
         }
+
+        GameObject[] tails = GameObject.FindGameObjectsWithTag("Tail");
+        foreach(GameObject tail in tails)
+        {
+            Pathfinding.Instance.GetNode(tail.transform.position).SetIsWalkable(false);
+        }
     }
 
     private void InitSnakeNodes()
@@ -160,5 +198,25 @@ public class EnemySnake : MonoBehaviour
             //WorldManager.instance.GameOver();
             Debug.Log("game over");
         }
+    }
+
+    private Vector3 FindNearestPowerUp()
+    {
+        GameObject[] powerUps = GameObject.FindGameObjectsWithTag("Powerup");
+        float minDistance = Mathf.Infinity;
+        Vector3 nearestPowerUpPosition = Vector3.zero;
+
+        foreach (GameObject powerUp in powerUps)
+        {
+            float distance = Vector3.Distance(head.position, powerUp.transform.position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestPowerUpPosition = powerUp.transform.position;
+            }
+        }
+
+        return nearestPowerUpPosition;
     }
 }

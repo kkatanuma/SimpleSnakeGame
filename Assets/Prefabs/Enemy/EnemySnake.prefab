@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7990429982851874737}
   m_Layer: 0
   m_Name: EnemySnake
-  m_TagString: Untagged
+  m_TagString: Snake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  movementFrequency: 0.1
   minBounds: 0
   maxBounds: 40
   move: 0
@@ -88,8 +89,8 @@ MonoBehaviour:
   nodes: []
   body: {fileID: 0}
   head: {fileID: 0}
+  tr: {fileID: 0}
   addNode: 0
-  enemySnakePrefab: {fileID: 6667383128199361815}
 --- !u!1 &6667383128708402148
 GameObject:
   m_ObjectHideFlags: 0

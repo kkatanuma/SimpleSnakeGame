@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028381, g: 0.22571398, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028396, g: 0.22571427, b: 0.30692327, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -584,7 +584,7 @@ MonoBehaviour:
   - {fileID: 2409055574878401781, guid: c670082d7a37c5d47814e4aa6951126d, type: 3}
   - {fileID: 2137322298759755183, guid: f18575f3119d4ba41b24419d4f54fefd, type: 3}
   SnakePrefab: {fileID: 433638315943852291, guid: 87b7882483e8d1541890e29fe5720fa0, type: 3}
-  EnemyPrefab: {fileID: 0}
+  EnemyPrefab: {fileID: 6667383128199361815, guid: 8bacd849d14f91348a53a9f4b441552b, type: 3}
   yAngles:
   - 0
   - 180

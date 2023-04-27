@@ -6,7 +6,7 @@ public class Snake : MonoBehaviour
 {
     private uint playerId;
     public float speed = 1.0f;
-    private float movementFrequency = 0.1f;
+    public float movementFrequency = 0.1f;
     public float minBounds = 0.0f;
     public float maxBounds = 40.0f;
     private float counter;
@@ -19,14 +19,14 @@ public class Snake : MonoBehaviour
 
     public Rigidbody body;
     public Rigidbody head;
-    private Transform tr;
+    public Transform tr;
     private Collider snakeCollider;
 
     public bool addNode;
     private bool outOfBounds;
 
     // Start is called before the first frame update
-    protected void Awake()
+    protected virtual void Awake()
     {
         tr = transform;
         body = GetComponent<Rigidbody>();
@@ -58,7 +58,7 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void InitSnakeNodes()
+    protected void InitSnakeNodes()
     {
         nodes = new List<Rigidbody>
         {
@@ -197,7 +197,7 @@ protected virtual void Move()
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Powerup"))
         {
@@ -213,8 +213,12 @@ protected virtual void Move()
         }
         else if (other.gameObject.CompareTag("Tail"))
         {
-            //Destroy(gameObject);
-            //WorldManager.instance.GameOver();
+            Destroy(gameObject);
+            WorldManager.instance.GameOver();
+        }else if (other.gameObject.CompareTag("Snake"))
+        {
+            Destroy(gameObject);
+            WorldManager.instance.GameOver(); 
         }
     }
 }

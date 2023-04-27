@@ -37,9 +37,13 @@ public class WorldManager : MonoBehaviour
     public void AddPoint()
     {
         powerupObtained++;
-        if(powerupObtained >= 5) {
-            powerupObtained = 0;
+        if(powerupObtained == 5) {
             SpawnManager.Instance.SpawnAWall();
+        }
+        if(powerupObtained == 3)
+        {
+            powerupObtained = 0;
+            SpawnManager.Instance.SpawnEnemySnake();
         }
     }
 }

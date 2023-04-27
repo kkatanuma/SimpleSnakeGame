@@ -26,7 +26,7 @@ public class SpawnManager : MonoBehaviour
     private int powerupCount;
     public int maxSpawnAttemptsPerObstacle = 20;
     public bool gameReady = false;
-    private Dictionary<PlayerDirection, Vector3> enemySpawnPos;
+    private List<Vector3> enemySpawnPos;
   
     // Start is called before the first frame update
     void Awake()
@@ -34,26 +34,13 @@ public class SpawnManager : MonoBehaviour
         Instance = this;
         pathfinding = new Pathfinding(40, 40);
         InitiateWalls();
-        enemySpawnPos = new Dictionary<PlayerDirection, Vector3>()
+        enemySpawnPos = new List<Vector3>()
         {
-            {
-            PlayerDirection.LEFT,
-            new Vector3(36, -3, 0)
-            },
-            {
-            PlayerDirection.UP,
-            new Vector3(3, 3, 0)
-            },
-            {
-            PlayerDirection.RIGHT,
-            new Vector3(3, 36, 0)
-            },
-            {
-            PlayerDirection.DOWN,
-            new Vector3(36, 36)
-            },
+            new Vector3(36, 3, 0),
+            new Vector3(36, 36, 0),
+            new Vector3(3, 3, 0),
+            new Vector3(3, 36, 0),
         };
-        SpawnEnemySnake();
     }
 
     public void Start()
@@ -227,8 +214,19 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnEnemySnake()
     {
-        
-        
+        int randomDir = Random.Range(0, enemySpawnPos.Count);
+        GameObject enemySnake = Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity);
+        if (randomDir == 2 || randomDir == 3)
+        {
+            enemySnake.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        Vector3 gridPosition = RoundToGrid(enemySpawnPos[randomDir]);
+        enemySnake.transform.position = gridPosition;
+        EnemySnake enemyScript =  enemySnake.GetComponent<EnemySnake>();
+        Vector3 targetPos = FurtestPowerupPosition(gridPosition);
+
+        List<Vector3> path = pathfinding.FindPath(gridPosition, targetPos);
+        enemyScript.SetPath(path);
     }
 
     private void CheckWallPosition()
@@ -240,4 +238,20 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    Vector3 FurtestPowerupPosition(Vector3 pos)
+    {
+        GameObject[] powerups = GameObject.FindGameObjectsWithTag("Powerup");
+        float maxDistance = Mathf.NegativeInfinity;
+        Vector3 targetPos = Vector3.zero;
+        foreach(GameObject powerup in powerups)
+        {
+            float distance = (Vector3.Distance(pos, powerup.transform.position));
+            if(distance > maxDistance)
+            {
+                maxDistance = distance;
+                targetPos = powerup.transform.position;
+            }
+         }
+        return targetPos;
+    }
 }

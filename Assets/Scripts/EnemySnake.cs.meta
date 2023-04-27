@@ -3,7 +3,11 @@ guid: e029a0ae6d6e8224f9a1ca9cb061c7d4
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - tailPrefab: {instanceID: 0}
+  - body: {instanceID: 0}
+  - head: {instanceID: 0}
+  - enemySnakePrefab: {fileID: 6667383128199361815, guid: 8bacd849d14f91348a53a9f4b441552b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

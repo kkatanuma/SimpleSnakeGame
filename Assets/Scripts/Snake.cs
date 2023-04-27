@@ -44,12 +44,12 @@ public class Snake : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+     void Update()
     {
         CheckMovementFrequency();
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if(move)
         {

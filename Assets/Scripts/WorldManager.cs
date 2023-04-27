@@ -39,7 +39,7 @@ public class WorldManager : MonoBehaviour
         powerupObtained++;
         if(powerupObtained >= 5) {
             powerupObtained = 0;
-            SpawnManager.instance.SpawnAWall();
+            SpawnManager.Instance.SpawnAWall();
         }
     }
 }

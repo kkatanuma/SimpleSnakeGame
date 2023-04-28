@@ -1,4 +1,3 @@
-using CodeMonkey.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -155,6 +154,9 @@ public class SpawnManager : MonoBehaviour
         return new Vector3(x, y, position.z) + Vector3.one * 0.5f;
     }
 
+    /// <summary>
+    /// Initiate Outside walls and random walls
+    /// </summary>
     public void InitiateWalls()
     {
         //Building side walls
@@ -192,13 +194,16 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn Snake in location doesn't overlap with other objects
+    /// </summary>
     public void SpawnSnake()
     {
         Vector3 spawnPos = FindValidSpawnPosition();
 
         if (spawnPos != Vector3.zero)
         {
-            Instantiate(SnakePrefab, RoundToGrid(spawnPos), Quaternion.identity);
+            Instantiate(SnakePrefab,(spawnPos), Quaternion.identity);
         }
         else
         {
@@ -207,6 +212,9 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spwn a wall at random location
+    /// </summary>
     public void SpawnAWall()
     {
         Vector3 spawnPos = FindValidSpawnPosition();
@@ -220,6 +228,10 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn EnemySnake that will move towards furthest powerups positions
+    /// EnemySnake will spawn will be randomly selected from 4 different locations in enemySpawnPos
+    /// </summary>
     public void SpawnEnemySnake()
     {
         int randomDir = Random.Range(0, enemySpawnPos.Count);
@@ -231,11 +243,16 @@ public class SpawnManager : MonoBehaviour
         Vector3 gridPosition = RoundToGrid(enemySpawnPos[randomDir]);
         enemySnake.transform.position = gridPosition;
         EnemySnake enemyScript =  enemySnake.GetComponent<EnemySnake>();
-        Vector3 targetPos = FurtestPowerupPosition(gridPosition);
+        Vector3 targetPos = FurthestPowerupPosition(gridPosition);
         enemyScript.Path = pathfinding.FindPath(gridPosition, targetPos);
     }
 
-    Vector3 FurtestPowerupPosition(Vector3 pos)
+    /// <summary>
+    /// Returns the Position of furthest powerups at the moment
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    Vector3 FurthestPowerupPosition(Vector3 pos)
     {
         GameObject[] powerups = GameObject.FindGameObjectsWithTag("Powerup");
         float maxDistance = Mathf.NegativeInfinity;

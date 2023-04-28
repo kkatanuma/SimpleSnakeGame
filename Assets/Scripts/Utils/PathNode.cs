@@ -8,14 +8,11 @@ public class PathNode
     public int x;
     public int y;
 
-
     public int gCost;
     public int hCost;
     public int fCost;
     public bool isWalkable { get; set; } = true;
-
     public PathNode cameFromNode;
-
     public PathNode(Grid<PathNode> grid, int x, int y)
     {
         this.grid = grid;
@@ -29,6 +26,11 @@ public class PathNode
         fCost = gCost + hCost;
     }
 
+    /// <summary>
+    /// By settings is Walkable to false, node will be 
+    /// added to visted list and will not be considered for a path
+    /// </summary>
+    /// <param name="isWalkable"></param>
     public void SetIsWalkable(bool isWalkable)
     {
         this.isWalkable = isWalkable;

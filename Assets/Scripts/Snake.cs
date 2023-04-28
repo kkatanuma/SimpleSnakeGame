@@ -53,7 +53,7 @@ public class Snake : MonoBehaviour
         CheckMovementFrequency();
     }
 
-    protected virtual void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (move)
         {
@@ -242,14 +242,14 @@ public class Snake : MonoBehaviour
         {
             addNode = true;
             Destroy(other.gameObject);
-            ScoreManager.instance.AddPoint();
-            WorldManager.instance.AddPoint();
+            ScoreManager.Instance.AddPoint();
+            WorldManager.Instance.AddPoint();
         }
         else if (other.gameObject.CompareTag(Tags.WALL) ||
             other.gameObject.CompareTag(Tags.TAIL) || other.gameObject.CompareTag(Tags.SNAKE))
         {
             Destroy(gameObject);
-            WorldManager.instance.GameOver();
+            WorldManager.Instance.GameOver();
         }
     }
 }

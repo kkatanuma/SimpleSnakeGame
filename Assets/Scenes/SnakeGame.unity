@@ -571,9 +571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98242b0f4c98b6949a11ad2eef27a095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 2
-  maxPowerups: 5
-  maxWalls: 10
   powerupPrefab: {fileID: 1377575363522042750, guid: 8ff8071b09a96e947ac40caf675ff0b9, type: 3}
   defaultWallPrefab: {fileID: 7986379232696414781, guid: c45b44e9958d96844aba8579dd69f8c9, type: 3}
   wallPrefabs:
@@ -585,16 +582,6 @@ MonoBehaviour:
   - {fileID: 2137322298759755183, guid: f18575f3119d4ba41b24419d4f54fefd, type: 3}
   SnakePrefab: {fileID: 433638315943852291, guid: 87b7882483e8d1541890e29fe5720fa0, type: 3}
   EnemyPrefab: {fileID: 6667383128199361815, guid: 8bacd849d14f91348a53a9f4b441552b, type: 3}
-  yAngles:
-  - 0
-  - 180
-  zAngles:
-  - 0
-  - 90
-  - 270
-  spawnProbablility: 0.25
-  maxSpawnAttemptsPerObstacle: 10
-  gameReady: 0
 --- !u!1 &592051478
 GameObject:
   m_ObjectHideFlags: 0
@@ -1120,7 +1107,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 963194227}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

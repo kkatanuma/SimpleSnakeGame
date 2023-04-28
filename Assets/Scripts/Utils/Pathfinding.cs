@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pathfinding 
 {
@@ -21,6 +18,7 @@ public class Pathfinding
     {
         grid = new Grid<PathNode>((int)width, (int)height, (int)cellSize, Vector3.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
     }
+
 
     public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)
     {
@@ -43,6 +41,15 @@ public class Pathfinding
         }
     }
 
+    /// <summary>
+    /// Find shortest path in grids from starting points to end points
+    /// path are calculated by following A* pathfinding algorithm 
+    /// </summary>
+    /// <param name="startX"></param>
+    /// <param name="startY"></param>
+    /// <param name="endX"></param>
+    /// <param name="endY"></param>
+    /// <returns></returns>
     public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
     {
         PathNode startNode = grid.GetGridObject(startX, startY);
@@ -99,10 +106,10 @@ public class Pathfinding
                 }
             }
         }
-
-        //Out of Nodes on the openList;
+        //No nodes left in openList
         return null;
     }
+
 
     private List<PathNode>CalculatePath(PathNode endNode)
     {
@@ -118,6 +125,11 @@ public class Pathfinding
         return path;
     }
 
+    /// <summary>
+    /// Check Neighbor of current Node for 4 directions
+    /// </summary>
+    /// <param name="currentNode"></param>
+    /// <returns></returns>
     private List<PathNode> GetNeighborList(PathNode currentNode)
     {
         List<PathNode> neighborList = new List<PathNode>();
@@ -139,6 +151,8 @@ public class Pathfinding
 
         return neighborList;
     }
+
+
     private int CalculateDistanceCost(PathNode a, PathNode b)
     {
         int xDistance = Mathf.Abs(a.x - b.x);
@@ -173,5 +187,4 @@ public class Pathfinding
     {
         return grid;
     }
-
 }

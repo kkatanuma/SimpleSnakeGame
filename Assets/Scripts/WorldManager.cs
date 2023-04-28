@@ -7,21 +7,19 @@ using UnityEngine.UI;
 
 public class WorldManager : MonoBehaviour
 {
-    public static WorldManager instance { get; private set; }
+    public static WorldManager Instance { get; private set; }
     public GameOverScreen GameOverScreen;
     private uint powerupObtained = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
-
+        Instance = this;
     }
 
-    private void Update()
-    {
-    }
-
+    /// <summary>
+    /// Display GameOver Background
+    /// </summary>
     public void GameOver()
     {
         GameOverScreen.Setup();
@@ -30,10 +28,14 @@ public class WorldManager : MonoBehaviour
     public void QuitButton()
     {
         Application.Quit();
-        Debug.Log("Application closed");
     }
 
 
+    /// <summary>
+    /// Add Point whenever powerups are collected
+    /// Spawn EnemySnake every 3 powerups
+    /// Spawn a wall every 5 poerups
+    /// </summary>
     public void AddPoint()
     {
         powerupObtained++;

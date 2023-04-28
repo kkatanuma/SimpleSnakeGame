@@ -20,35 +20,35 @@ public class EnemySnake : Snake
         movementFrequency = 0.08f;
     }
 
-    protected override void FixedUpdate()
+    /// <summary>
+    /// Move Snake Head to given path positions moves nodes towards the previous positions
+    /// Snake will be destroyed when reaching target position
+    /// </summary>
+    protected override void Move()
     {
-        if (move)
+        if (m_path != null && currentPathIndex < m_path.Count)
         {
-            move = false;
-            if (m_path != null && currentPathIndex < m_path.Count)
-            {
-                Vector3 parentPos = head.position;
-                Vector3 targetPosition = m_path[currentPathIndex];
-                head.position = Vector3.MoveTowards(head.position, targetPosition, moveStep);
-                body.position = Vector3.MoveTowards(body.position, targetPosition, moveStep);
+            Vector3 parentPos = head.position;
+            Vector3 targetPosition = m_path[currentPathIndex];
+            head.position = Vector3.MoveTowards(head.position, targetPosition, moveStep);
+            body.position = Vector3.MoveTowards(body.position, targetPosition, moveStep);
 
-                if (Vector3.Distance(head.position, targetPosition) < 0.1f)
-                {
-                    currentPathIndex++;
-                }
-
-                for (int i = 1; i < nodes.Count; i++)
-                {
-                    Vector3 prevPos = nodes[i].position;
-                    nodes[i].position = Vector3.MoveTowards(nodes[i].position, parentPos, moveStep);
-                    parentPos = prevPos;
-                }
-            }
-            else
+            if (Vector3.Distance(head.position, targetPosition) < 0.1f)
             {
-                //Reached Targeted Position
-                Destroy(gameObject);
+                currentPathIndex++;
             }
+
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                Vector3 prevPos = nodes[i].position;
+                nodes[i].position = Vector3.MoveTowards(nodes[i].position, parentPos, moveStep);
+                parentPos = prevPos;
+            }
+        }
+        else
+        {
+            //Reached Target Position
+            Destroy(gameObject);
         }
     }
 
@@ -96,7 +96,7 @@ public class EnemySnake : Snake
         }else if (other.gameObject.CompareTag(Tags.TAIL))
         {
             Destroy(other.transform.parent.gameObject);
-            WorldManager.instance.GameOver();
+            WorldManager.Instance.GameOver();
         }
     }
 

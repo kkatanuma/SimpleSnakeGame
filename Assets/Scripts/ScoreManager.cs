@@ -5,16 +5,15 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
+    public static ScoreManager Instance { get; private set; }
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highscoreText;
-
-    int score { get; set; } = 0;
-    int highscore = 0;
+    private int score = 0;
+    private int highscore = 0;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
     // Start is called before the first frame update
     void Start()
@@ -23,7 +22,6 @@ public class ScoreManager : MonoBehaviour
         scoreText.text = score.ToString() + " POINTS";
         highscoreText.text = "HIGHSCORE:" + highscore.ToString();
     }
-
 
     public void AddPoint()
     {

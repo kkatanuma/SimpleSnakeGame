@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class Tags
     public static string WALL = "Wall";
     public static string POWERUP = "Powerup";
     public static string TAIL = "Tail";
+    public static string SNAKE = "Snake";
 }
 
 

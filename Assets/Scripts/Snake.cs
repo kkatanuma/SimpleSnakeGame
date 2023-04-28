@@ -4,24 +4,30 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    public float m_speed = 1.0f;
-    public float m_movementFrequency = 0.1f;
-    public float minBounds = 0.0f;
-    public float maxBounds = 40.0f;
-    private float m_counter;
-    public bool move;
-    public PlayerDirection m_currentDirection;
-    public GameObject tailPrefab;
-    public List<Vector3> deltaPositions;
-    private List<Vector3> previousHeadPositions;
-    public List<Rigidbody> nodes;
-
-    public Rigidbody body;
-    public Rigidbody head;
-    public Transform tr;
+    [Header("Snake Configuration")]
+    private float speed = 1.0f;
+    protected PlayerDirection m_currentDirection;
+    public PlayerDirection CurrentDirection
+    {
+        get { return m_currentDirection; }
+        set { m_currentDirection = value; }
+    }
+    [Header("Snake Components")]
+    protected Rigidbody body;
+    protected Rigidbody head;
+    protected Transform tr;
+    protected List<Rigidbody> nodes;
     private Collider snakeCollider;
+    public GameObject tailPrefab;
 
-    public bool addNode;
+    private float counter;
+    protected float movementFrequency = 0.1f;
+    protected bool move;
+    private bool addNode;
+    private float minBounds = 0.0f;
+    private float maxBounds = 40.0f;
+    private List<Vector3> deltaPositions;
+    private List<Vector3> previousHeadPositions;
 
     // Start is called before the first frame update
     protected virtual void Awake()
@@ -33,29 +39,32 @@ public class Snake : MonoBehaviour
         SpawnSnake();
 
         deltaPositions = new List<Vector3>(){
-            new Vector3(-m_speed, 0f), //-dx
-            new Vector3(0f, m_speed),  //dy
-            new Vector3(m_speed, 0f),  //dx
-            new Vector3(0f, -m_speed), //-dy
+            new Vector3(-speed, 0f), //-dx
+            new Vector3(0f, speed),  //dy
+            new Vector3(speed, 0f),  //dx
+            new Vector3(0f, -speed), //-dy
         };
         previousHeadPositions = new List<Vector3>();
     }
 
     // Update is called once per frame
-     void Update()
+    void Update()
     {
         CheckMovementFrequency();
     }
 
     protected virtual void FixedUpdate()
     {
-        if(move)
+        if (move)
         {
             move = false;
             Move();
         }
     }
 
+    /// <summary>
+    /// Initialize Snake, Add Rigidbody in a List for easier management while moving
+    /// </summary>
     protected void InitSnakeNodes()
     {
         nodes = new List<Rigidbody>
@@ -64,10 +73,13 @@ public class Snake : MonoBehaviour
             tr.GetChild(1).GetComponent<Rigidbody>(),
             tr.GetChild(2).GetComponent<Rigidbody>()
         };
-
         head = nodes[0];
     }
 
+    /// <summary>
+    /// Spawn snake in random direction and adjust corresponding nodes depending on 
+    /// current direction
+    /// </summary>
     private void SpawnSnake()
     {
         SetRandomDirection();
@@ -93,133 +105,151 @@ public class Snake : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Returns random direction by pursing to PlayerDirection enum
+    /// </summary>
     public void SetRandomDirection()
     {
         int randomDir = Random.Range(0, (int)PlayerDirection.COUNT);
         m_currentDirection = (PlayerDirection)randomDir;
     }
 
-protected virtual void Move()
-{
-    Vector3 deltaPosition = deltaPositions[(int)m_currentDirection];
-    Vector3 parentPos = head.position;
-    Vector3 prevPosition;
-
-    body.position += deltaPosition;
-    head.position += deltaPosition;
-
-    // Wrap around if the snake goes out of bounds
-    if (head.position.x > maxBounds || head.position.x < minBounds|| head.position.y > maxBounds || head.position.y < minBounds)
-            {
-        // Add the previous head position to previousHeadPositions list
-        previousHeadPositions.Add(parentPos);
-
-        if (head.position.x > maxBounds)
-        {
-            head.position = new Vector3(minBounds, head.position.y, 0f);
-            snakeCollider.transform.position = new Vector3(minBounds, head.position.y, 0f);
-        }
-        else if (head.position.x < minBounds)
-        {
-            head.position = new Vector3(maxBounds, head.position.y, 0f);
-            snakeCollider.transform.position = new Vector3(maxBounds, head.position.y, 0f);
-        }
-        else if (head.position.y > maxBounds)
-        {
-            head.position = new Vector3(head.position.x, -minBounds, 0f);
-            snakeCollider.transform.position = new Vector3(head.position.x, -minBounds, 0f);
-        }
-        else if (head.position.y < -minBounds)
-        {
-            head.position = new Vector3(head.position.x, maxBounds, 0f);
-            snakeCollider.transform.position = new Vector3(head.position.x, maxBounds, 0f);
-        }
-    }
-
-    for (int i = 1; i < nodes.Count; i++)
-    {
-        // Check if there is a previous head position for this node to follow
-        if (previousHeadPositions.Count > 0)
-        {
-            prevPosition = nodes[i].position;
-            nodes[i].position = previousHeadPositions[0];
-            parentPos = prevPosition;
-
-            // Remove the followed position from the list
-            previousHeadPositions.RemoveAt(0);
-        }
-        else
-        {
-            prevPosition = nodes[i].position;
-            nodes[i].position = parentPos;
-            parentPos = prevPosition;
-        }
-    }
-
-    // Check if we need to add node
-    if (addNode)
-    {
-        addNode = false;
-        GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position, Quaternion.identity);
-
-        // Keep the scale relative to parent
-        newTail.transform.SetParent(transform, true);
-        nodes.Add(newTail.GetComponent<Rigidbody>());
-    }
-}
-
-
-
-
+    /// <summary>
+    /// Updates counter to keep track of movement frequency
+    /// </summary>
     protected void CheckMovementFrequency()
     {
-        m_counter += Time.deltaTime;
-        if (m_counter >= m_movementFrequency)
+        counter += Time.deltaTime;
+        if (counter >= movementFrequency)
         {
-            m_counter = 0f;
+            counter = 0f;
             move = true;
         }
     }
 
-    public void ForceMove()
+    /// <summary>
+    /// Move position of head using deltaPositoins with currentDirection
+    /// once head is updated, update all nodes by following parent position
+    /// If addNode is set to True, New Tail will be added
+    /// </summary>
+    protected virtual void Move()
     {
-        m_counter = 0;
-        move = false;
-        Move();
+        Vector3 deltaPosition = deltaPositions[(int)m_currentDirection];
+        Vector3 parentPos = head.position;
+
+        body.position += deltaPosition;
+        head.position += deltaPosition;
+
+        if (IsHeadOutOfBounds())
+        {
+            WrapAround();
+        }
+
+        UpdateNodePositions(parentPos);
+
+        if (addNode)
+        {
+            addNode = false;
+            GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position, Quaternion.identity);
+            newTail.transform.SetParent(transform, true);
+            nodes.Add(newTail.GetComponent<Rigidbody>());
+        }
     }
 
-    public void Grow()
+    /// <summary>
+    /// Checks if Snake Head is out of bounds 
+    /// </summary>
+    /// <returns></returns>
+    private bool IsHeadOutOfBounds()
     {
-        GameObject newTail = Instantiate(tailPrefab, nodes[nodes.Count - 1].position += deltaPositions[(int)m_currentDirection], Quaternion.identity) ;
-        nodes.Add(tr.GetChild(nodes.Count).GetComponent<Rigidbody>());
+        return head.position.x > maxBounds || head.position.x < minBounds || head.position.y > maxBounds || head.position.y < minBounds;
     }
 
+    /// <summary>
+    /// Moves snake to the opposite side of the world when going 
+    /// out of bounds
+    /// </summary>
+    private void WrapAround()
+    {
+        previousHeadPositions.Add(head.position);
 
+        if (head.position.x > maxBounds)
+        {
+            SetHeadAndColliderPosition(new Vector3(minBounds, head.position.y, 0f));
+        }
+        else if (head.position.x < minBounds)
+        {
+            SetHeadAndColliderPosition(new Vector3(maxBounds, head.position.y, 0f));
+        }
+        else if (head.position.y > maxBounds)
+        {
+            SetHeadAndColliderPosition(new Vector3(head.position.x, -minBounds, 0f));
+        }
+        else if (head.position.y < -minBounds)
+        {
+            SetHeadAndColliderPosition(new Vector3(head.position.x, maxBounds, 0f));
+        }
+    }
+
+    /// <summary>
+    /// Update position of head and collider box.
+    /// Fixed issue of collider not updating when going out of bounds
+    /// </summary>
+    /// <param name="position"></param> 
+    private void SetHeadAndColliderPosition(Vector3 position)
+    {
+        head.position = position;
+        snakeCollider.transform.position = position;
+    }
+
+    /// <summary>
+    /// Move each nodes by updating to previous nodes position
+    /// when Snake wraparound it will store snake head as a
+    /// temporary buffer
+    /// </summary>
+    /// <param name="parentPos"></param>
+    private void UpdateNodePositions(Vector3 parentPos)
+    {
+        Vector3 prevPosition;
+
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            if (previousHeadPositions.Count > 0)
+            {
+                prevPosition = nodes[i].position;
+                nodes[i].position = previousHeadPositions[0];
+                parentPos = prevPosition;
+                previousHeadPositions.RemoveAt(0);
+            }
+            else
+            {
+                prevPosition = nodes[i].position;
+                nodes[i].position = parentPos;
+                parentPos = prevPosition;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles collision with other objects
+    /// when collides with powerups it will set addNode to True
+    /// when colliding with any other objects in the game it will call GameOver
+    /// </summary>
+    /// <param name="other"></param>
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Powerup"))
+        if (other.gameObject.CompareTag(Tags.POWERUP))
         {
             addNode = true;
             Destroy(other.gameObject);
             ScoreManager.instance.AddPoint();
             WorldManager.instance.AddPoint();
         }
-        else if (other.gameObject.CompareTag("Wall"))
-        {
-            Destroy(gameObject);
-            WorldManager.instance.GameOver();
-        }
-        else if (other.gameObject.CompareTag("Tail"))
-        {
-            Destroy(gameObject);
-            WorldManager.instance.GameOver();
-        }
-        else if (other.gameObject.CompareTag("Snake"))
+        else if (other.gameObject.CompareTag(Tags.WALL) ||
+            other.gameObject.CompareTag(Tags.TAIL) || other.gameObject.CompareTag(Tags.SNAKE))
         {
             Destroy(gameObject);
             WorldManager.instance.GameOver();
         }
     }
-
-    
 }

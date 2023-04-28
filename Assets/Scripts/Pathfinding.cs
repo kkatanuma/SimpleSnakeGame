@@ -12,9 +12,14 @@ public class Pathfinding
     private List<PathNode> openList;
     private List<PathNode> closedList;
 
-    public Pathfinding(int width, int height)
+    public Pathfinding(int width, int height, int cellSize)
     {
-        grid = new Grid<PathNode>(width, height, 1f, Vector3.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        grid = new Grid<PathNode>(width, height, cellSize, Vector3.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+    }
+
+    public Pathfinding(float width, float height, float cellSize)
+    {
+        grid = new Grid<PathNode>((int)width, (int)height, (int)cellSize, Vector3.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
     }
 
     public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)

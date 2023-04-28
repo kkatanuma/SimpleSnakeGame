@@ -1,17 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerDirection direction;
+    private Snake snake;
     private int horizontal = 0;
     private int vertical = 0;
-    public Snake snake;
     private float lastInputTime;
-    public float inputDelay = 0.1f;
+    private float inputDelay = 0.1f;
 
     public enum Axis
     {
@@ -19,7 +14,7 @@ public class PlayerController : MonoBehaviour
         Vertical
     }
 
-    private void Awake()
+    void Awake()
     {
         snake = GetComponent<Snake>();
     }
@@ -32,13 +27,14 @@ public class PlayerController : MonoBehaviour
         SetMovement();
     }
 
+    /// <summary>
+    /// Handles Keyboard Input from a player
+    /// </summary>
     void GetKeyboardInput()
     {
-        if (Time.time - lastInputTime < inputDelay)
-        {
-            return;
-        }
-
+        //Prevent Snake from turning too quickly
+        if (Time.time - lastInputTime < inputDelay) { return; }
+        
         int newHorizontal = GetAxisRaw(Axis.Horizontal);
         int newVertical = GetAxisRaw(Axis.Vertical);
 
@@ -55,6 +51,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set Direction based on the PlayerInput
+    /// </summary>
     void SetMovement()
     {
         if (vertical != 0)
@@ -67,6 +66,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Depends on the Input key, it will modify horizontal and vertical axis
+    /// </summary>
+    /// <param name="axis"></param>
+    /// <returns></returns>
     int GetAxisRaw(Axis axis)
     {
         if (axis == Axis.Horizontal)
@@ -102,21 +106,24 @@ public class PlayerController : MonoBehaviour
         return 0;
     }
 
+    /// <summary>
+    /// Change current direction of snake, prevents snake from turning opposite direction
+    /// </summary>
+    /// <param name="inputDir"></param>
     public void SetInputDirection(PlayerDirection inputDir)
     {
-        //Prevent change direction to opposite sides
-        if (inputDir == PlayerDirection.UP && snake.m_currentDirection == PlayerDirection.DOWN ||
-           inputDir == PlayerDirection.DOWN && snake.m_currentDirection == PlayerDirection.UP ||
-           inputDir == PlayerDirection.RIGHT && snake.m_currentDirection == PlayerDirection.LEFT ||
-           inputDir == PlayerDirection.LEFT && snake.m_currentDirection == PlayerDirection.RIGHT)
+        //Prevent change to opposite direction
+        if (inputDir == PlayerDirection.UP && snake.CurrentDirection == PlayerDirection.DOWN ||
+           inputDir == PlayerDirection.DOWN && snake.CurrentDirection == PlayerDirection.UP ||
+           inputDir == PlayerDirection.RIGHT && snake.CurrentDirection == PlayerDirection.LEFT ||
+           inputDir == PlayerDirection.LEFT && snake.CurrentDirection == PlayerDirection.RIGHT)
         {
             return;
         }
         else
         {
-            snake.m_currentDirection = inputDir;
-            //TO handle playerInput immediately
-            //snake.ForceMove();
+            snake.CurrentDirection = inputDir;
+
         }
     }
 }

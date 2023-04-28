@@ -1,13 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
-using JetBrains.Annotations;
+
 
 public class EnemySnake : Snake
 {
-    int currentPathIndex;
-    List<Vector3> m_path;
+    private int currentPathIndex;
+    private List<Vector3> m_path;
+    public List<Vector3> Path
+    { 
+        set { m_path = value; }
+    }
     private float moveStep = 1.0f;
     protected override void Awake()
     {
@@ -15,14 +17,14 @@ public class EnemySnake : Snake
         body = GetComponent<Rigidbody>();
         InitSnakeNodes();
         currentPathIndex = 0;
-        m_movementFrequency = 0.08f;
+        movementFrequency = 0.08f;
     }
 
     protected override void FixedUpdate()
     {
         if (move)
         {
-            move = false; // Reset move to false after updating the position
+            move = false;
             if (m_path != null && currentPathIndex < m_path.Count)
             {
                 Vector3 parentPos = head.position;
@@ -44,11 +46,16 @@ public class EnemySnake : Snake
             }
             else
             {
+                //Reached Targeted Position
                 Destroy(gameObject);
             }
         }
     }
 
+    /// <summary>
+    /// Set Direction and Change position of the nodes based on direction
+    /// </summary>
+    /// <param name="dir"></param>
     public void SetDirection(int dir)
     {
         m_currentDirection = (PlayerDirection)dir;
@@ -73,18 +80,20 @@ public class EnemySnake : Snake
         }
     }
 
-    public void SetPath(List<Vector3> path)
-    {
-        m_path = path;
-    }
-
+    /// <summary>
+    /// Handles collision with other objects
+    /// when collides with Powerup destroy EnemySnake
+    /// when collides with Tail of a Player it will destroy the Player Snake
+    /// and calls GameOver
+    /// </summary>
+    /// <param name="other"></param>
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Powerup"))
+        if (other.gameObject.CompareTag(Tags.POWERUP))
         {
             Destroy(other.gameObject);
             Destroy(gameObject);
-        }else if (other.gameObject.CompareTag("Tail"))
+        }else if (other.gameObject.CompareTag(Tags.TAIL))
         {
             Destroy(other.transform.parent.gameObject);
             WorldManager.instance.GameOver();

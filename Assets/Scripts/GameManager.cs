@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WorldManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static WorldManager Instance { get; private set; }
+    public static GameManager Instance { get; private set; }
     public GameOverScreen GameOverScreen;
     private uint powerupObtained = 0;
 
@@ -43,7 +43,8 @@ public class WorldManager : MonoBehaviour
         {
             SpawnManager.Instance.SpawnEnemySnake();
         }
-        if (powerupObtained % 5 ==0) {
+        if (powerupObtained % 5 == 0)
+        {
             SpawnManager.Instance.SpawnAWall();
         }
     }

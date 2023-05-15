@@ -243,13 +243,13 @@ public class Snake : MonoBehaviour
             addNode = true;
             Destroy(other.gameObject);
             ScoreManager.Instance.AddPoint();
-            WorldManager.Instance.AddPoint();
+            GameManager.Instance.AddPoint();
         }
         else if (other.gameObject.CompareTag(Tags.WALL) ||
             other.gameObject.CompareTag(Tags.TAIL) || other.gameObject.CompareTag(Tags.SNAKE))
         {
             Destroy(gameObject);
-            WorldManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 }

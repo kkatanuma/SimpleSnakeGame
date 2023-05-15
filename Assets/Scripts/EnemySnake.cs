@@ -96,7 +96,7 @@ public class EnemySnake : Snake
         }else if (other.gameObject.CompareTag(Tags.TAIL))
         {
             Destroy(other.transform.parent.gameObject);
-            WorldManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 

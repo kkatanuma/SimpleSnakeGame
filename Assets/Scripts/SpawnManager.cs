@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -44,9 +46,16 @@ public class SpawnManager : MonoBehaviour
 
     public void Start()
     {
+        //CountForThreeSeconds();
         SpawnSnake();
         InvokeRepeating("SpawnPowerups", spawnDelay, repeat);
     }
+
+    IEnumerator CountForThreeSeconds()
+    {
+        yield return new WaitForSeconds(3);
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -54,6 +63,7 @@ public class SpawnManager : MonoBehaviour
         CheckWallPositionInGrid();
         powerupCount = CheckPowerupCount();
     }
+
 
     /// <summary>
     /// Check wall position and set corresponding PathNode to false

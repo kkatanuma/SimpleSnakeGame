@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public GameOverScreen GameOverScreen;
     private uint powerupObtained = 0;
     private bool isGameActive;
+    public TextMeshProUGUI countdownText;
+    private IEnumerator coroutine;
+    public Button startButton;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +38,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        GameOverScreen.Setup();
+        isGameActive = false;
+        GameOverScreen.gameObject.SetActive(true);
     }
 
     public void QuitButton()
@@ -45,7 +49,16 @@ public class GameManager : MonoBehaviour
 
     public void StartButton()
     {
-        StartCoroutine(Countdown(3));
+        countdownText.gameObject.SetActive(true);
+        coroutine = Countdown(3);
+        StartCoroutine(coroutine);
+        startButton.interactable = false;
+    }
+
+    public void RestartButton()
+    {
+        SceneManager.LoadScene("SnakeGame");
+        startButton.interactable = true;
     }
 
     IEnumerator Countdown(int seconds)
@@ -53,10 +66,12 @@ public class GameManager : MonoBehaviour
         int counter = seconds;
         while (counter > 0)
         {
-            Debug.Log(counter);
-            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1));
+            
+            yield return new WaitForSecondsRealtime(1);
             counter--;
+            countdownText.text = counter.ToString();
         }
+        countdownText.gameObject.SetActive(false);
         isGameActive = true;
     }
 
